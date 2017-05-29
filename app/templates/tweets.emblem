@@ -1,2 +1,5 @@
 h1 tweets.hbs
+ul
+  each filteredTweets as |tweet|
+    app-tweet tweet=tweet
 = outlet

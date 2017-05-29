@@ -10,9 +10,9 @@ export default Ember.Controller.extend({
     },
     "hashtag": null,
     "user": null,
-    "filteredTweets": Ember.computed("hashtag", "model", function(){
-      var hashtag = this.get('hashtag')
-      var tweet   = this.get('model')
-    })
+    // "filteredTweets": Ember.computed("hashtag", "model", function(){
+    //   // var hashtag = this.get('hashtag')
+    //   let tweet   = this.get('model')
+    // })
   }
 });

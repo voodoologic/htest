@@ -1,10 +1,26 @@
 import Ember from 'ember';
 import InfinityRoute from "ember-infinity/mixins/route";
 
-export default Ember.Route.extend( InfinityRoute,  {
+export default Ember.Route.extend({
   subdomain: null,
   model: function() {
-    return []
+    return {
+      tweets: [
+        {
+          user_name: 'Doug'
+        }
+      ]
+    }
+// export default Ember.Route.extend( InfinityRoute,  {
+//   subdomain: null,
+//   model: function() {
+//     return {
+//       tweets: [
+//         {
+//           user_name: 'Doug'
+//         }
+//       ]
+//     }
     // return this.infinityModel('tweet', {"perPage": 50, "startingPage": 1});
     // if (params.hastag != null && params.user != null) {
     //   this.infinityModel('tweet', {
