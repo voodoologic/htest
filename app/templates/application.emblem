@@ -5,7 +5,7 @@
   .tab-content
     .tab-pane.active
       = outlet
-#control-modal.modal.fade
+/ #control-modal.modal.fade
   .modal-dialog
     .modal-content
       .modal-header
@@ -16,6 +16,5 @@
       .modal-footer
         button.btn.btn-default type='button' data-dismiss="modal" Close
         button.btn.btn-primary{action 'commitStreamChange'} type='button' data-dismiss="modal" aria-label="close" Save Changes
-root
+h1 root
 
-= outlet

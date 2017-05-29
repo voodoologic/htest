@@ -1,0 +1,2 @@
+h1 tweets.hbs
+= outlet
