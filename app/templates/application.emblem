@@ -1,0 +1,21 @@
+.container-fluid.col-lg-8.col-lg-offset-2.col-md-8.col-md-offset-2
+  = each flashMessages.queue as |flash|
+    flash-message flash=flash
+  top-section authenticateWithTwitter=(action 'authenticateWithTwitter') logOut=(action 'logOut') ping=(action 'ping') appTitle=appTitle
+  .tab-content
+    .tab-pane.active
+      = outlet
+#control-modal.modal.fade
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button.pull-right.close type='button' data-dismiss="modal" aria-label="close" &times;
+        h4.modal-title Stream keywords
+      .modal-body
+        input.stream-input data-role="tagsinput"
+      .modal-footer
+        button.btn.btn-default type='button' data-dismiss="modal" Close
+        button.btn.btn-primary{action 'commitStreamChange'} type='button' data-dismiss="modal" aria-label="close" Save Changes
+root
+
+= outlet
