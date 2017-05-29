@@ -1,0 +1,8 @@
+h2#title = appTitle
+if session.isAuthenticated
+  button{action 'logOut'} Log out
+else
+  button{action 'authenticateWithTwitter'} Log in
+button{action 'showStreamControls'} open controls
+button{action 'ping'} ping
+ember-notify
