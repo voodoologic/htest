@@ -1,14 +1,16 @@
 li.media.row.list-group-item.col-lg-12
-  = link-to 'user' tweet
+  / = link-to 'user' tweet
     img.pull-left.media-object src=tweet.profile_image
   .media-body
-    = link-to 'user' tweet class='pull-left'
+    h1 hello
+    / = link-to 'user' tweet class='pull-left'
       h4.media-heading
         = tweet.screen_name
     a href=tweet.url
-      = moment-from-now tweet.created_at
+      tweet.url
+      / = moment-from-now tweet.created_at
     .clearfix
-    p
+    /p
       = each tweetTextTokens as |token|
         if token.isUser
           = link-to 'user' token.urlText
@@ -23,4 +25,4 @@ li.media.row.list-group-item.col-lg-12
           token.text
   .media
     img src=tweet.media_url
-= tweetText
+/ = tweetText

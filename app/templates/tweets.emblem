@@ -1,5 +1,6 @@
 h1 tweets.hbs
 ul
   each filteredTweets as |tweet|
+    p derp
     app-tweet tweet=tweet
 = outlet
