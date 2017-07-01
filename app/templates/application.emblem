@@ -6,7 +6,7 @@ h1 root
   .tab-content
     .tab-pane.active
       = outlet
-/ #control-modal.modal.fade
+#control-modal.modal.fade
   .modal-dialog
     .modal-content
       .modal-header

@@ -1,0 +1,17 @@
+.tabable
+  ul.nav.nav-tabs
+    li
+      =link-to "home" | home
+    li
+      = link-to 'stream' | stream
+    li
+      =link-to "hashtags" | hashtags
+    li
+      =link-to "users" | users
+    li
+      =link-to "tweets" | tweets
+    li
+      a href="http://blog.hatora.de" blog
+    li
+      =link-to "about" | about
+.clearfix

@@ -1,0 +1,9 @@
+br
+br
+br
+ul
+  each model as |hashtag|
+    app-hashtag hashtag=hashtag
+  li.media.row.list-group-item.col-lg-4
+    = infinity-loader infinityModel=model
+= outlet
