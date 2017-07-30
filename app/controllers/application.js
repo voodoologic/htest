@@ -1,13 +1,67 @@
+/* eslint-env node */
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
-  "actions":{
-    "authenticateWithTwitter": function(){
+  danthes: Ember.inject.service(),
+  actions:{
+    authenticateWithTwitter: function(){
     },
-    "logOut": function(){
+    logOut: function(){
     },
-    "ping": function(){
+    ping: function(){
+    }
+  },
+  init(){
+    notification = this.get('notify')
+    this.get('danthes').sign(
+      {
+        channel: 'messages',
+        callback: function() {
+          new Ember.RSVP.Promise( function(resolve, reject) {
+            resolve(message)
+          }).then(function(message) {
+            notification.info(message)
+          })
+        }
+      }
+    ),
+    this.get('danthes').sign(
+      {
+        channel: 'notifications',
+        callback: function() {
+          new Ember.RSVP.Promise( function(resolve, reject) {
+            resolve(message)
+          }).then(function(message) {
+            notification.info(message)
+          })
+        }
+      }
+    )
+  },
+  actions: {
+    authenticateWithTwitter: () => {
+      this.get('session').authenticate('authenticator:torii', 'dougtwitter', this.get('subdomain'))
+      .then(function() {
+        this.get('session').authorize('authorizer:twitter');
+        route.transitionTo('index');
+      })
+    },
+    logOut: () => {
+      this.get('session').invalidate('authenticator:torii').then(
+        () => { route.transitionTo('index')  }
+      )
+    },
+    ping: () => {
+      this.get('danthes.fayeClient').client.publish( '/commands', {
+        command: 'restart_and_search',
+        restart_and_search: $('input.stream-input').val()
+      })
+    },
+    commitStreamChange: () => {
+      this.get('danthes.fayeClient').client.publish( '/commands', {
+        command: "restart_and_search",
+        restart_and_search: $('input.stream-input').val()
+      })
     }
   }
-    
 });

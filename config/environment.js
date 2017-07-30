@@ -6,6 +6,18 @@ module.exports = function(environment) {
     environment: environment,
     rootURL: '/',
     locationType: 'auto',
+    subdomainMapping: {
+      '':null,
+      'www': 'www'
+    },
+    torii: {
+      providers: {
+        'twitter': {
+          appId: 'ehy2oJuRcw3SlUUFJL9CKg',
+          requestTokenUri: 'http://lvh.me:3000/users/auth/twitter' /* we don't use this anymore :) */
+        }
+      }
+    },
     EmberENV: {
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
@@ -20,6 +32,16 @@ module.exports = function(environment) {
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created
+    },
+    contentSecurityPolicy: {
+      'default-src': "'none'",
+      'script-src': "'self' 'unsafe-inline' 'unsafe-eval' 'http://api.hatora.de/' 'http://localhost:9292'",
+      'font-src': "'self'",
+      'connect-src': "'self' 'http://api.hatora.de/' 'ws://localhost:9292/faye' 'http://localhost:9292/faye'",
+      'img-src': "'self' 'http://pbs.twimg.com/'",
+      'report-uri':"'localhost'",
+      'style-src': "'self' 'unsafe-inline'",
+      'frame-src': "'none'"
     }
   };
 
@@ -29,6 +51,10 @@ module.exports = function(environment) {
     // ENV.APP.LOG_TRANSITIONS = true;
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
+    ENV.apiScheme = 'http://';
+    ENV.apiHost   = 'lvh.me';
+    ENV.apiPort   = ':3000';
+    ENV.publisherUrl   = 'http://localhost:9292';
   }
 
   if (environment === 'test') {
