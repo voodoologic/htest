@@ -1,5 +1,7 @@
+import fetch from 'fetch';
 import Ember from 'ember';
 import config from '../config/environment';
+
 
 export default Ember.Service.extend({
   debug: false,
@@ -8,6 +10,7 @@ export default Ember.Service.extend({
   },
   init() {
     this._super()
+    this.set('subscriptions', {})
   },
   server: config.publisherUrl,
   mount: '/faye',
@@ -27,14 +30,14 @@ export default Ember.Service.extend({
     )
   },
   faye(self) {
-    self.get('fayeClient') || self.get('connectToFaye')(self)
+    self.get('fayeClient') || self.connectToFaye(self)
     self.get('fayeClient').disable('long-polling')
-    self.get('fayeClient')
+    return self.get('fayeClient')
   },
   fayeExtension(self) {
     return {
-      incoming: (message, callback) => { callback(message) },
-      outgoing: (message, callback) => {
+      incoming(message, callback) { callback(message) },
+      outgoing(message, callback) {
         if(!message.ext){ message.ext = {} }
         if (message.channel == '/meta/subscribe') {
           message.ext.danthes_signature = self.get(`subscriptions.${message.subscription.slice(1)}.opts.signatures`)
@@ -47,53 +50,42 @@ export default Ember.Service.extend({
     }
   },
   connectToFaye(self) {
-    if (self.get('server')){
-      self.set('fayeClient', new Faye.Client(self.get('server') + self.get('mount')))
-      self.get('fayeClient').addExtension(self.get('fayeExtension')(self))
-    }
+    self.set('fayeClient', new Faye.Client(self.get('server') + self.get('mount')));
+    self.get('fayeClient').addExtension(self.get('fayeExtension')(self));
   },
   sign(options) {
     this.get('debugMessage')('sign into faye')
     this.get('server') || this.set('server', options.server)
-    this.get('subscriptions') || this.set('subscrioptions', {})
+    this.get('subscriptions') || this.set('subscriptions', {})
     let channel = options.channel
-    if (Ember.none(this.get('subscription.channel'))) {
+    if (!this.get('subscription.channel')) {
       this.set(`subscriptions.${channel}`, {})
-      this.set(`subscriptions.${channel}.callback`, options['callback'])
-      this.get('activeChannel')( channel).bind( this )
+      this.set(`subscriptions.${channel}.callback`, options.callback)
+      this.get('activeChannel')( channel, this )//.then(function(data){ console.log('hello') })
     }
   },
-  activeChannel(channel){
-    new Ember.RSVP.Promise(function(resolve, reject) {
-      if (this.get(`subscription.${channel}.activated`)){
+  activeChannel(channel, self){
+    return new Ember.RSVP.Promise(function(resolve, reject) {
+      if (self.get(`subscription.${channel}.activated`)){
         return true
       }
-      this.request_token().then((data)=>{
-        this.set(`subscriptions.${channel}.opts`, {})
-        this.set(`subscriptions.${channel}.opts.signature`, data[channel].signature)
-        this.set(`subscriptions.${channel}.opts.timestamp`, data[channel].timestamp)
-        let subscription = this.get('faye')(this).subscribe(`/${channel}`, function() {
-          this.handleResponse(message, channel).bind(this)
+      self.request_token().then((data) => {
+        console.log(data)
+        self.set(`subscriptions.${channel}.opts`, {})
+        self.set(`subscriptions.${channel}.opts.signature`, data[channel].signature)
+        self.set(`subscriptions.${channel}.opts.timestamp`, data[channel].timestamp)
+        self.get('faye')(self).subscribe(`/${channel}`, function() {
+          self.handleResponse(message, channel)
         })
-      })
+        resolve(data);
+      }, function(reason) { console.log(reason)})
     })
   },
+
   request_token() {
-    new Ember.RSVP.Promise((resolve, reject) => {
-      Ember.$.ajax(
-        {
-          type: "GET",
-          url: config.apiScheme + config.apiHost + config.apiPort + '/api/v1/data',
-          dataType: "josn",
-          success: function(data) { resolve(data) },
-        }
-      )
-    })
+    return fetch(config.apiScheme + config.apiHost + config.apiPort + '/api/v1/data').then(function(response){ return response.json(); })
   },
   handleResponse(message, channel){
-   
+    console.log(message);
   }
-
-
-
 });

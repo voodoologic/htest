@@ -3,6 +3,7 @@ import Ember from 'ember';
 
 export default Ember.Controller.extend({
   danthes: Ember.inject.service(),
+  notify: Ember.inject.service(),
   actions:{
     authenticateWithTwitter: function(){
     },
@@ -11,24 +12,25 @@ export default Ember.Controller.extend({
     ping: function(){
     }
   },
-  init(){
-    notification = this.get('notify')
+  init(args){
+    const notification = this.get('notify')
     this.get('danthes').sign(
       {
         channel: 'messages',
-        callback: function() {
+        callback() {
           new Ember.RSVP.Promise( function(resolve, reject) {
             resolve(message)
           }).then(function(message) {
+            console.log(message);
             notification.info(message)
           })
         }
       }
-    ),
+    );
     this.get('danthes').sign(
       {
         channel: 'notifications',
-        callback: function() {
+        callback() {
           new Ember.RSVP.Promise( function(resolve, reject) {
             resolve(message)
           }).then(function(message) {
@@ -37,6 +39,7 @@ export default Ember.Controller.extend({
         }
       }
     )
+    this._super(args);
   },
   actions: {
     authenticateWithTwitter: () => {

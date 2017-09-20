@@ -10,11 +10,14 @@ module.exports = function(environment) {
       '':null,
       'www': 'www'
     },
+    faye: {
+      URL: 'http://publisher.hatora.de/faye',
+    },
     torii: {
       providers: {
         'twitter': {
           appId: 'ehy2oJuRcw3SlUUFJL9CKg',
-          requestTokenUri: 'http://lvh.me:3000/users/auth/twitter' /* we don't use this anymore :) */
+          requestTokenUri: 'http://lvh.me:5000/users/auth/twitter' /* we don't use this anymore :) */
         }
       }
     },
@@ -37,7 +40,7 @@ module.exports = function(environment) {
       'default-src': "'none'",
       'script-src': "'self' 'unsafe-inline' 'unsafe-eval' 'http://api.hatora.de/' 'http://localhost:9292'",
       'font-src': "'self'",
-      'connect-src': "'self' 'http://api.hatora.de/' 'ws://localhost:9292/faye' 'http://localhost:9292/faye'",
+      'connect-src': "'self' 'http://api.hatora.de/' 'http://publisher.hatora.de' 'ws://localhost:9292/faye' 'http://localhost:9292/faye'",
       'img-src': "'self' 'http://pbs.twimg.com/'",
       'report-uri':"'localhost'",
       'style-src': "'self' 'unsafe-inline'",
@@ -52,9 +55,9 @@ module.exports = function(environment) {
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
     ENV.apiScheme = 'http://';
-    ENV.apiHost   = 'lvh.me';
-    ENV.apiPort   = ':3000';
-    ENV.publisherUrl   = 'http://localhost:9292';
+    ENV.apiHost   = 'api.hatora.de';
+    ENV.apiPort   = '';
+    ENV.publisherUrl   = 'http://publisher.hatora.de';
   }
 
   if (environment === 'test') {
